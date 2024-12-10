@@ -18,9 +18,13 @@ document.getElementById('signupform').addEventListener('submit', async(e) => {
   console.log(name);
   console.log(password);
   console.log(email)
+  document.getElementById('name').value="";
+  document.getElementById('password').value="";
+  document.getElementById('email').value="";
   const response = await fetch('http://localhost:3000/sign_up', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
+    credentials: 'include', 
     body: JSON.stringify({
         Name: name,
         Password:password,
@@ -30,8 +34,9 @@ document.getElementById('signupform').addEventListener('submit', async(e) => {
 });
 const result = await response.json();
 if (response.ok) {
+    sessionStorage.setItem('userId', result.userId);
     alert("ACCOUNT CREATED SUCCESSFULLY");
-    window.location.href = "template.html";
+    window.location.href = "lettertypes.html";
 } else {
     alert('Error : ' + result.error);
 }
@@ -45,9 +50,12 @@ document.getElementById('signinform').addEventListener('submit', async(e) => {
   const password = document.getElementById('password1').value;
   console.log(name);
   console.log(password);
+  document.getElementById('name1').value="";
+  document.getElementById('password1').value="";
   const response = await fetch('http://localhost:3000/sign_in', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
+    credentials: 'include', 
     body: JSON.stringify({
         Name: name,
         Password:password
@@ -55,11 +63,12 @@ document.getElementById('signinform').addEventListener('submit', async(e) => {
 });
 const result = await response.json();
 if (response.ok) {
-    alert("LOGGED IN SUCCESSFULLY");
-    window.location.href = "template.html";
+  sessionStorage.setItem('userId', result.userId);
+  alert(result.message);
+  window.location.href = "lettertypes.html";
 } else {
-    alert('Error : ' + result.error);
+  alert('Error: ' + result.error);
 }
-      
+     
 }
 )
