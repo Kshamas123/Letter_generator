@@ -1,14 +1,14 @@
 document.getElementById('letterForm').addEventListener('submit', async(e) => {
     e.preventDefault();
     const senderAddress = document.getElementById('senderAddress').value;
-    const date = document.getElementById('date').value;
+    const letterdate = document.getElementById('date').value;
     const receiverName = document.getElementById('receiverName').value;
     const eventType = document.getElementById('eventType').value;
     const eventDate = document.getElementById('eventDate').value;
     const eventVenue = document.getElementById('eventVenue').value;
     const senderName=document.getElementById('senderName').value;
     console.log(senderAddress);
-    console.log(date);
+    console.log(letterdate);
     console.log(receiverName);
     console.log(eventType);
     console.log(eventDate);
@@ -22,7 +22,7 @@ document.getElementById('letterForm').addEventListener('submit', async(e) => {
       credentials: 'include', 
       body: JSON.stringify({
           senderAddress:senderAddress,
-          date:date,
+          letterdate:letterdate,
           receiverName:receiverName,
           eventType:eventType,
           eventDate:eventDate,

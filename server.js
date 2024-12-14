@@ -84,17 +84,22 @@ app.post('/sign_in', async (req, res) => {
 });
 
 
-app.post('/invitation_letter', (req, res) => {
+app.post('/invitation_letter',async (req, res) => {
 
     try{
-     const{ senderAddress,date,eceiverName,eventType,eventDate,eventVenue,senderName,userId}=req.body;
-     console.log(userId);
-     res.status(200).send({ message: ' successful' });
+     const{ senderAddress,letterdate,receiverName,eventType,eventDate,eventVenue,senderName,userId}=req.body;
+     if (!senderAddress || !letterdate || !receiverName|| !eventType|| !eventDate || !eventVenue || !senderName || !userId) {
+        return res.status(400).send({ error: 'Feilds are required' });
     }
-    catch(error)
-    {
-        res.status(500).send({ error: 'Internal Server Error' });
-    }
+    const query = 'INSERT INTO invitation_letter (USERID,SENDERADDRESS,LETTER_DATE,RECEIVERNAME,EVENTTYPE,EVENTDATE,EVENTVENUE,SENDERNAME) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+    const [result] = await pool.query(query, [userId,senderAddress,letterdate,receiverName,eventType,eventDate,eventVenue,senderName]);
+
+    res.status(201).send({ message: 'Data added successfully'});
+}
+ catch (error) {
+    console.error('Error during registration:', error.stack);
+    res.status(500).send({ error: 'Internal Server Error' });
+}
     
   });
 
