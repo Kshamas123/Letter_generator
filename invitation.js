@@ -35,7 +35,7 @@ document.getElementById('letterForm').addEventListener('submit', async(e) => {
   const result = await response.json();
   if (response.ok) {
       alert("DETAILS COLLECTED SUCCESSFULLY");
-      window.location.href = "generated.html";
+      window.location.href = "gen-invitation.html";
   } else {
       alert('Error : ' + result.error);
   }

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Congratulations Letter Preview</title>
+  <link rel="stylesheet" href="gen-congrats.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+  <header class="header">
+    <h1>Congratulations Letter Preview</h1>
+  </header>
+
+  <div class="container">
+    <div class="letter-preview">
+      <h2>Congratulations Letter</h2>
+      <div id="finalCongratsLetter">
+        <!-- The congratulatory message preview will be displayed here -->
+        <p><strong>Sender's Address:</strong> <span id="finalSenderAddress"></span></p>
+        <p><strong>Date:</strong> <span id="finalLetterDate"></span></p>
+        <p>Dear <span id="finalReceiverName"></span>,</p>
+        <p>Congratulations on <span id="finalReason"></span>! This is such a wonderful milestone, and I couldn’t be happier for you.</p>
+        <p>Your hard work and dedication truly deserve this success. May this achievement open up many more opportunities and bring you immense happiness.</p>
+        <p>Celebrate this moment to the fullest—you’ve earned it!</p>
+        <p>Best wishes,</p>
+        <p><span id="finalSenderName"></span></p>
+        
+      </div>
+    </div>
+
+    <div class="download-container">
+      <h2>Download Your Letter</h2>
+      <button id="downloadPDFButton">Download as PDF</button>
+      <!-- <button id="downloadDocxButton">Download as Word</button>
+      <button id="downloadCSVButton">Download as CSV</button> -->
+    </div>
+  </div>
+
+  <script src="gen-congrats.js"></script>
+</body>
+</html>

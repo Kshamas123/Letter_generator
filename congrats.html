@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="congrats.css">
+  <title>Congratulations Letter Generator</title>
+</head>
+<body>
+  <header class="header">
+    <h1 class="website-name">Congratulations Letter Generator</h1>
+  </header>
+
+  <div class="container">
+    <div class="form-container">
+      <form id="letterForm">
+        <label for="senderAddress">Sender's Address:</label>
+        <input type="text" id="senderAddress" placeholder="Enter your address" required>
+
+        <label for="date">Date:</label>
+        <input type="date" id="date" required>
+
+        <label for="receiverName">Receiver's Name:</label>
+        <input type="text" id="receiverName" placeholder="Enter receiver's name" required>
+
+        <label for="reason">Reason (Achievement):</label>
+        <input type="text" id="reason" placeholder="Enter the reason for congratulations" required>
+
+        <label for="senderName">Sender's Name:</label>
+        <input type="text" id="senderName" placeholder="Enter sender's name" required>
+
+        <button type="submit">Generate Letter</button>
+      </form>
+    </div>
+
+    <div class="blueprint-container">
+      <h2>Letter Preview</h2>
+      <div id="letterBlueprint" class="letter">
+        <p><strong>Sender's Address:</strong> [Your Address]</p>
+        <p><strong>Date:</strong> [Date]</p>
+        <p>Dear [Receiver's Name],</p>
+        <p>Congratulations on [Reason]! This is such a wonderful milestone, and I couldn’t be happier for you.</p>
+        <p>Your hard work and dedication truly deserve this success. May this achievement open up many more opportunities and bring you immense happiness.</p>
+        <p>Celebrate this moment to the fullest—you’ve earned it!</p>
+        <p>Best wishes,</p>
+        <p>[Sender's Name]</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="congrats.js"></script>
+</body>
+</html>

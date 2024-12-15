@@ -25,7 +25,7 @@ const port = 3000;
 const pool = mysql.createPool({
     host: 'localhost',
     user: 'root',
-    password: 'kshama123',
+    password: 'megha@102',
     database: 'LETTER_GENERATOR_DBMS',
     waitForConnections: true,
     connectionLimit: 10,
@@ -162,6 +162,49 @@ app.post('/birthday_wish_letter',async (req, res) => {
         res.status(500).send({ error: 'Internal Server Error' });
     }
 });
+
+
+app.post('/congratulations_letter',async (req, res) => {
+
+    try{
+     const{ senderAddress,letterdate,receiverName,reason,senderName,userId}=req.body;
+     if (!senderAddress || !letterdate || !receiverName||!reason || !senderName || !userId) {
+        return res.status(400).send({ error: 'Feilds are required' });
+    }
+    const query = 'INSERT INTO congratulations_letter (USERID,SENDERADDRESS,LETTER_DATE,RECEIVERNAME,REASON,SENDERNAME) VALUES (?, ?, ?, ?, ?, ?)';
+    const [result] = await pool.query(query, [userId,senderAddress,letterdate,receiverName,reason,senderName]);
+
+    res.status(201).send({ message: 'Data added successfully'});
+}
+ catch (error) {
+    console.error('Error during registration:', error.stack);
+    res.status(500).send({ error: 'Internal Server Error' });
+}
+    
+  });
+
+  app.get('/get-congratulations-letter', async (req, res) => {
+    try {
+        const userId = req.session.userId;
+
+        if (!userId) {
+            return res.status(400).send({ error: 'User is not logged in' });
+        }
+
+        const query = 'SELECT * FROM congratulations_letter WHERE USERID = ?';
+        const [results] = await pool.query(query, [userId]);
+
+        if (results.length === 0) {
+            return res.status(404).send({ error: 'congratulations letter not found' });
+        }
+
+        res.status(200).send(results[0]); // Send the first letter data
+    } catch (error) {
+        console.error('Error fetching letter data:', error.stack);
+        res.status(500).send({ error: 'Internal Server Error' });
+    }
+});
+
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
