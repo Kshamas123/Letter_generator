@@ -124,6 +124,44 @@ app.post('/invitation_letter',async (req, res) => {
     }
 });
 
+app.post('/birthday_wish_letter',async (req, res) => {
+
+    try{
+     const{ senderAddress,letterdate,receiverName,senderName,userId}=req.body;
+     if (!senderAddress || !letterdate || !receiverName||  !senderName || !userId) {
+        return res.status(400).send({ error: 'Feilds are required' });
+    }
+    const query = 'INSERT INTO birthday_wish (USERID,SENDERADDRESS,LETTER_DATE,RECEIVERNAME,SENDERNAME) VALUES (?, ?, ?, ?, ?)';
+    const [result] = await pool.query(query, [userId,senderAddress,letterdate,receiverName,senderName]);
+
+    res.status(201).send({ message: 'Data added successfully'});
+}
+ catch (error) {
+    console.error('Error during registration:', error.stack);
+    res.status(500).send({ error: 'Internal Server Error' });
+} 
+  });
+
+  app.get('/get-birthday-letter', async(req, res) => {
+    try {
+        const userId = req.headers.authorization?.split(' ')[1];
+        if (!userId) {
+            return res.status(400).send({ error: 'User is not logged in' });
+        }
+        
+        const query = 'SELECT * FROM birthday_wish WHERE USERID = ?';
+        const [results] = await pool.query(query, [userId]);
+
+        if (results.length === 0) {
+            return res.status(404).send({ error: 'Invitation letter not found' });
+        }
+
+        res.status(200).send(results[0]); // Send the first letter data
+    } catch (error) {
+        console.error('Error fetching letter data:', error.stack);
+        res.status(500).send({ error: 'Internal Server Error' });
+    }
+});
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);

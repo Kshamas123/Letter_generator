@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Letter Preview</title>
+  <link rel="stylesheet" href="generated.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+  <header class="header">
+    <h1>Invitation Letter Preview</h1>
+  </header>
+
+  <div class="container">
+    <div class="letter-preview">
+      <h2>Birthday wishes Letter</h2>
+      <div id="finalLetter">
+        <!-- The letter preview will be displayed here -->
+        <p><strong>Sender's Address:</strong> <span id="finalSenderAddress"></span></p>
+        <p><strong>Date:</strong> <span id="finalLetterDate"></span></p>
+        <p>Dear <span id="finalReceiverName"></span>,</p>
+        <p>Happy Birthday!</p>
+        <p>I hope this special day brings you lots of joy, love, and laughter. You deserve all the happiness in the world, and I wish you a year filled with success, health, and cherished moments. </p>
+        <p>Looking forward to celebrating with you soon! </p>
+        <p>Warm wishes</p>
+        <p><span id="finalSenderName"></span></p>
+      </div>
+    </div>
+
+    <div class="download-container">
+      <h2>Download Your Letter</h2>
+      <button id="downloadPDFButton">Download as PDF</button>
+      <button id="downloadDocxButton">Download as Word</button>
+      <button id="downloadCSVButton">Download as CSV</button>
+    </div>
+  </div>
+
+  <script src="birthdaywishgenerated.js"></script>
+</body>
+</html>

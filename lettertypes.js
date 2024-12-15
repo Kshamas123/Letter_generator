@@ -4,7 +4,7 @@ const buttons = document.querySelectorAll('.letter-button');
 
 const letterPages = {
   "Invitation Letter": "invitation.html",
-  "Letter B": "letterB.html",
+  "Birthday Letter": "birthdaywish.html",
   "Letter C": "letterC.html",
   "Letter D": "letterD.html",
   "Letter E": "letterE.html",
