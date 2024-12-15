@@ -25,7 +25,7 @@ const port = 3000;
 const pool = mysql.createPool({
     host: 'localhost',
     user: 'root',
-    password: 'megha@102',
+    password: 'kshama123',
     database: 'LETTER_GENERATOR_DBMS',
     waitForConnections: true,
     connectionLimit: 10,
@@ -102,14 +102,14 @@ app.post('/invitation_letter',async (req, res) => {
 }
     
   });
-  app.get('/get-invitation-letter', async (req, res) => {
+  
+  app.get('/get-invitation-letter', async(req, res) => {
     try {
-        const userId = req.session.userId;
-
+        const userId = req.headers.authorization?.split(' ')[1];
         if (!userId) {
             return res.status(400).send({ error: 'User is not logged in' });
         }
-
+        
         const query = 'SELECT * FROM invitation_letter WHERE USERID = ?';
         const [results] = await pool.query(query, [userId]);
 

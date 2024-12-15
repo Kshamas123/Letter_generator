@@ -10,9 +10,14 @@ function formatDate(dateString) {
 // Function to fetch letter data from the backend
 async function fetchLetterData() {
   try {
+    const userId = sessionStorage.getItem('userId'); // Get userId from sessionStorage
     const response = await fetch('http://localhost:3000/get-invitation-letter', {
       method: 'GET',
       credentials: 'include', // Allow cookies/session data to be sent
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${userId}`, // Send userId in Authorization header
+      },
     });
 
     if (!response.ok) {
@@ -33,6 +38,7 @@ async function fetchLetterData() {
     console.error('Error fetching letter data:', error);
   }
 }
+
 
 // Function to generate the PDF
 function generatePDF() {
@@ -72,11 +78,11 @@ function generatePDF() {
   const eventVenue = document.getElementById('finalEventVenue').textContent;
 
   const bodyText = [
-    `I’m writing to invite you to a special occasion! We are hosting a ${eventType} on`,
+    `I'm writing to invite you to a special occasion! We are hosting a ${eventType} on`,
     `${eventDate} at ${eventVenue}. It would mean so much to us if you could join and`,
     `make the event memorable with your presence.`,
     ``,
-    `Please let me know if you’ll be able to come!`,
+    `Please let me know if you'll be able to come!`,
     `Looking forward to seeing you.`,
   ];
 
