@@ -25,7 +25,7 @@ const port = 3000;
 const pool = mysql.createPool({
     host: 'localhost',
     user: 'root',
-    password: 'kshama123',
+    password: 'megha@102',
     database: 'LETTER_GENERATOR_DBMS',
     waitForConnections: true,
     connectionLimit: 10,
@@ -102,6 +102,28 @@ app.post('/invitation_letter',async (req, res) => {
 }
     
   });
+  app.get('/get-invitation-letter', async (req, res) => {
+    try {
+        const userId = req.session.userId;
+
+        if (!userId) {
+            return res.status(400).send({ error: 'User is not logged in' });
+        }
+
+        const query = 'SELECT * FROM invitation_letter WHERE USERID = ?';
+        const [results] = await pool.query(query, [userId]);
+
+        if (results.length === 0) {
+            return res.status(404).send({ error: 'Invitation letter not found' });
+        }
+
+        res.status(200).send(results[0]); // Send the first letter data
+    } catch (error) {
+        console.error('Error fetching letter data:', error.stack);
+        res.status(500).send({ error: 'Internal Server Error' });
+    }
+});
+
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
