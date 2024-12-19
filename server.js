@@ -25,7 +25,7 @@ const port = 3000;
 const pool = mysql.createPool({
     host: 'localhost',
     user: 'root',
-    password: 'megha@102',
+    password: 'kshama123',
     database: 'LETTER_GENERATOR_DBMS',
     waitForConnections: true,
     connectionLimit: 10,
@@ -84,45 +84,154 @@ app.post('/sign_in', async (req, res) => {
 });
 
 
-app.post('/invitation_letter',async (req, res) => {
 
-    try{
-     const{ senderAddress,letterdate,receiverName,eventType,eventDate,eventVenue,senderName,userId}=req.body;
-     if (!senderAddress || !letterdate || !receiverName|| !eventType|| !eventDate || !eventVenue || !senderName || !userId) {
-        return res.status(400).send({ error: 'Feilds are required' });
+app.post('/invitation_letter', async (req, res) => {
+    try {
+      const {
+        senderAddress,
+        letterdate,
+        receiverName,
+        eventType,
+        eventDate,
+        eventVenue,
+        senderName,
+        userId,
+      } = req.body;
+  
+      // Check for required fields
+      if (
+        !senderAddress ||
+        !letterdate ||
+        !receiverName ||
+        !eventType ||
+        !eventDate ||
+        !eventVenue ||
+        !senderName ||
+        !userId
+      ) {
+        return res.status(400).send({ error: 'Fields are required' });
+      }
+  
+      // SQL query to insert data
+      const query =
+        'INSERT INTO invitation_letter (USERID, SENDERADDRESS, LETTER_DATE, RECEIVERNAME, EVENTTYPE, EVENTDATE, EVENTVENUE, SENDERNAME) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+  
+      // Execute the query
+      const [result] = await pool.query(query, [
+        userId,
+        senderAddress,
+        letterdate,
+        receiverName,
+        eventType,
+        eventDate,
+        eventVenue,
+        senderName,
+      ]);
+  
+      // Send the generated LETTERID back to the frontend
+      res.status(201).send({
+        message: 'Data added successfully',
+        letterId: result.insertId, // `insertId` contains the auto-incremented ID
+      });
+    } catch (error) {
+      console.error('Error during registration:', error.stack);
+      res.status(500).send({ error: 'Internal Server Error' });
     }
-    const query = 'INSERT INTO invitation_letter (USERID,SENDERADDRESS,LETTER_DATE,RECEIVERNAME,EVENTTYPE,EVENTDATE,EVENTVENUE,SENDERNAME) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
-    const [result] = await pool.query(query, [userId,senderAddress,letterdate,receiverName,eventType,eventDate,eventVenue,senderName]);
-
-    res.status(201).send({ message: 'Data added successfully'});
-}
- catch (error) {
-    console.error('Error during registration:', error.stack);
-    res.status(500).send({ error: 'Internal Server Error' });
-}
-    
+  });
+  app.post('/update-invitation_letter', async (req, res) => {
+    try {
+      const {
+        senderAddress,
+        letterdate,
+        receiverName,
+        eventType,
+        eventDate,
+        eventVenue,
+        senderName,
+        userId,
+        letterId,
+      } = req.body;
+  
+      // Check for required fields
+      if (
+        !senderAddress ||
+        !letterdate ||
+        !receiverName ||
+        !eventType ||
+        !eventDate ||
+        !eventVenue ||
+        !senderName ||
+        !userId ||
+        !letterId
+      ) {
+        return res.status(400).send({ error: 'Fields are required' });
+      }
+  
+      // SQL query to insert data
+      const query =
+        'UPDATE invitation_letter SET USERID=?, SENDERADDRESS=?, LETTER_DATE=?, RECEIVERNAME=?, EVENTTYPE=?, EVENTDATE=?, EVENTVENUE=?, SENDERNAME=? where USERID=? and LETTERID=?';
+  
+      // Execute the query
+      const [result] = await pool.query(query, [
+        userId,
+        senderAddress,
+        letterdate,
+        receiverName,
+        eventType,
+        eventDate,
+        eventVenue,
+        senderName,
+        userId,
+        letterId,
+      ]);
+  
+      // Send the generated LETTERID back to the frontend
+      res.status(201).send({
+        message: 'Data updated successfully',
+      });
+    } catch (error) {
+      console.error('Error during registration:', error.stack);
+      res.status(500).send({ error: 'Internal Server Error' });
+    }
   });
   
-  app.get('/get-invitation-letter', async(req, res) => {
+app.get('/get-invitation-letter', async (req, res) => {
     try {
-        const userId = req.headers.authorization?.split(' ')[1];
-        if (!userId) {
-            return res.status(400).send({ error: 'User is not logged in' });
-        }
-        
-        const query = 'SELECT * FROM invitation_letter WHERE USERID = ?';
-        const [results] = await pool.query(query, [userId]);
-
-        if (results.length === 0) {
-            return res.status(404).send({ error: 'Invitation letter not found' });
-        }
-
-        res.status(200).send(results[0]); // Send the first letter data
+      // Extract Authorization header
+      const authHeader = req.headers['authorization'];
+      if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        return res.status(401).send({ error: 'Unauthorized: Missing or invalid token' });
+      }
+  
+      // Decode Base64 and split userId and letterId
+      const token = authHeader.split(' ')[1];
+      const decodedToken = atob(token); // Decode Base64
+      const [userIdPart, letterIdPart] = decodedToken.split(',');
+  
+      const userId = userIdPart.split(':')[1];
+      const letterId = letterIdPart.split(':')[1];
+  
+      if (!userId || !letterId) {
+        return res.status(400).send({ error: 'Invalid token format' });
+      }
+  
+      // Query the database
+      const query = 'SELECT * FROM invitation_letter WHERE USERID = ? AND LETTERID = ?';
+      const [rows] = await pool.query(query, [userId, letterId]);
+  
+      if (rows.length === 0) {
+        return res.status(404).send({ error: 'Letter not found' });
+      }
+  
+      res.status(200).json(rows[0]);
     } catch (error) {
-        console.error('Error fetching letter data:', error.stack);
-        res.status(500).send({ error: 'Internal Server Error' });
+      console.error('Error fetching letter data:', error);
+      res.status(500).send({ error: 'Internal Server Error' });
     }
-});
+  });
+  
+  
+
 
 app.post('/birthday_wish_letter',async (req, res) => {
 

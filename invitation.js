@@ -15,7 +15,10 @@ document.getElementById('letterForm').addEventListener('submit', async(e) => {
     console.log(eventVenue);
     console.log(senderName);
     const userId=sessionStorage.getItem('userId')
+    const letterId = sessionStorage.getItem('letterId');
     console.log(userId)
+    console.log(letterId)
+    if(letterId===null){
  const response = await fetch('http://localhost:3000/invitation_letter', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -34,11 +37,48 @@ document.getElementById('letterForm').addEventListener('submit', async(e) => {
   });
   const result = await response.json();
   if (response.ok) {
+    sessionStorage.setItem('letterId', result.letterId);
       alert("DETAILS COLLECTED SUCCESSFULLY");
       window.location.href = "gen-invitation.html";
   } else {
       alert('Error : ' + result.error);
   }
+}
+else
+{
+    const response = await fetch('http://localhost:3000/update-invitation_letter', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include', 
+        body: JSON.stringify({
+            senderAddress:senderAddress,
+            letterdate:letterdate,
+            receiverName:receiverName,
+            eventType:eventType,
+            eventDate:eventDate,
+            eventVenue:eventVenue,
+            senderName:senderName,
+            userId:userId,
+            letterId:letterId
+        }),
+        
+    });
+    const result = await response.json();
+    if (response.ok) {
+        alert("DETAILS UPDATED SUCCESSFULLY");
+        window.location.href = "gen-invitation.html";
+    } else {
+        alert('Error : ' + result.error);
+    }  
+}
+//   const result = await response.json();
+//   if (response.ok) {
+//     sessionStorage.setItem('letterId', result.letterId);
+//       alert("DETAILS COLLECTED SUCCESSFULLY");
+//       window.location.href = "gen-invitation.html";
+//   } else {
+//       alert('Error : ' + result.error);
+//   }
         
   }
   )

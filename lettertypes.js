@@ -19,9 +19,17 @@ const letterPages = {
   "Letter N": "letterN.html"
 };
 
+function clearSessionExceptUserId() {
+  const userIdValue = sessionStorage.getItem('userId'); // Store userId value temporarily
+
+  sessionStorage.clear(); // Clear all session storage
+
+  sessionStorage.setItem('userId', userIdValue); // Restore userId back into sessionStorage
+}
 
 buttons.forEach(button => {
   button.addEventListener('click', () => {
+    clearSessionExceptUserId();
     const letterName = button.textContent.trim(); 
     const page = letterPages[letterName]; // Find the corresponding HTML page
     if (page) {

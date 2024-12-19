@@ -11,12 +11,21 @@ function formatDate(dateString) {
 async function fetchLetterData() {
   try {
     const userId = sessionStorage.getItem('userId'); // Get userId from sessionStorage
+    const letterId = sessionStorage.getItem('letterId'); // Get letterId from sessionStorage
+
+    if (!userId || !letterId) {
+      throw new Error('Missing userId or letterId in sessionStorage');
+    }
+
+    // Combine userId and letterId into a single token-like format
+    const token = `UserID:${userId},LetterID:${letterId}`;
+
     const response = await fetch('http://localhost:3000/get-invitation-letter', {
       method: 'GET',
-      credentials: 'include', // Allow cookies/session data to be sent
+      credentials: 'include', // Allow cookies/session data
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${userId}`, // Send userId in Authorization header
+        'Authorization': `Bearer ${btoa(token)}`, // Base64-encoded Authorization token
       },
     });
 
@@ -38,6 +47,7 @@ async function fetchLetterData() {
     console.error('Error fetching letter data:', error);
   }
 }
+
 
 
 // Function to generate the PDF
