@@ -242,8 +242,31 @@ app.post('/birthday_wish_letter',async (req, res) => {
     }
     const query = 'INSERT INTO birthday_wish (USERID,SENDERADDRESS,LETTER_DATE,RECEIVERNAME,SENDERNAME) VALUES (?, ?, ?, ?, ?)';
     const [result] = await pool.query(query, [userId,senderAddress,letterdate,receiverName,senderName]);
+  
+    res.status(201).send({
+      message: 'Data added successfully',
+      letterId: result.insertId, // `insertId` contains the auto-incremented ID
+    });
+}
+ catch (error) {
+    console.error('Error during registration:', error.stack);
+    res.status(500).send({ error: 'Internal Server Error' });
+} 
+  });
 
-    res.status(201).send({ message: 'Data added successfully'});
+  app.post('/update-birthday_wish_letter',async (req, res) => {
+
+    try{
+     const{ senderAddress,letterdate,receiverName,senderName,userId,birthdaysession}=req.body;
+     if (!senderAddress || !letterdate || !receiverName||  !senderName || !userId || !birthdaysession) {
+        return res.status(400).send({ error: 'Feilds are required' });
+    }
+    const query = 'UPDATE  birthday_wish SET USERID=?,SENDERADDRESS=?,LETTER_DATE=?,RECEIVERNAME=?,SENDERNAME=?  where USERID=? AND LETTERID=?';
+    const [result] = await pool.query(query, [userId,senderAddress,letterdate,receiverName,senderName,userId,birthdaysession]);
+  
+    res.status(201).send({
+      message: 'Data updated successfully',
+    });
 }
  catch (error) {
     console.error('Error during registration:', error.stack);
@@ -253,19 +276,33 @@ app.post('/birthday_wish_letter',async (req, res) => {
 
   app.get('/get-birthday-letter', async(req, res) => {
     try {
-        const userId = req.headers.authorization?.split(' ')[1];
-        if (!userId) {
-            return res.status(400).send({ error: 'User is not logged in' });
-        }
-        
-        const query = 'SELECT * FROM birthday_wish WHERE USERID = ?';
-        const [results] = await pool.query(query, [userId]);
-
-        if (results.length === 0) {
-            return res.status(404).send({ error: 'Invitation letter not found' });
-        }
-
-        res.status(200).send(results[0]); // Send the first letter data
+      // Extract Authorization header
+      const authHeader = req.headers['authorization'];
+      if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        return res.status(401).send({ error: 'Unauthorized: Missing or invalid token' });
+      }
+  
+      // Decode Base64 and split userId and letterId
+      const token = authHeader.split(' ')[1];
+      const decodedToken = atob(token); // Decode Base64
+      const [userIdPart, letterIdPart] = decodedToken.split(',');
+  
+      const userId = userIdPart.split(':')[1];
+      const letterId = letterIdPart.split(':')[1];
+  
+      if (!userId || !letterId) {
+        return res.status(400).send({ error: 'Invalid token format' });
+      }
+  
+      // Query the database
+      const query = 'SELECT * FROM birthday_wish WHERE USERID = ? AND LETTERID = ?';
+      const [rows] = await pool.query(query, [userId, letterId]);
+  
+      if (rows.length === 0) {
+        return res.status(404).send({ error: 'Letter not found' });
+      }
+  
+      res.status(200).json(rows[0]);
     } catch (error) {
         console.error('Error fetching letter data:', error.stack);
         res.status(500).send({ error: 'Internal Server Error' });

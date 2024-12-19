@@ -11,12 +11,14 @@ function formatDate(dateString) {
   async function fetchLetterData() {
     try {
       const userId = sessionStorage.getItem('userId'); // Get userId from sessionStorage
+      const birtdaysession = sessionStorage.getItem('birtdaysession'); 
+      const token = `UserID:${userId},LetterID:${birtdaysession}`;
       const response = await fetch('http://localhost:3000/get-birthday-letter', {
         method: 'GET',
         credentials: 'include', // Allow cookies/session data to be sent
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${userId}`, // Send userId in Authorization header
+          'Authorization': `Bearer ${btoa(token)}`, // Send userId in Authorization header
         },
       });
   

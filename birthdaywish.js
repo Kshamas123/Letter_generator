@@ -9,7 +9,9 @@ document.getElementById('letterForm').addEventListener('submit', async(e) => {
     console.log(receiverName);
     console.log(senderName);
     const userId=sessionStorage.getItem('userId')
+    const birthdaysession=sessionStorage.getItem('birtdaysession')
     console.log(userId)
+    if(birthdaysession===null){
  const response = await fetch('http://localhost:3000/birthday_wish_letter', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -25,11 +27,35 @@ document.getElementById('letterForm').addEventListener('submit', async(e) => {
   });
   const result = await response.json();
   if (response.ok) {
+    sessionStorage.setItem('birtdaysession', result.letterId);
       alert("DETAILS COLLECTED SUCCESSFULLY");
       window.location.href = "birthdaywishgenerated.html";
   } else {
       alert('Error : ' + result.error);
   }
-        
+    }else
+    {
+        const response = await fetch('http://localhost:3000/update-birthday_wish_letter', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include', 
+            body: JSON.stringify({
+                senderAddress:senderAddress,
+                letterdate:letterdate,
+                receiverName:receiverName,
+                senderName:senderName,
+                userId:userId,
+                birthdaysession:birthdaysession
+            }),
+            
+        });
+        const result = await response.json();
+        if (response.ok) {
+            alert("DETAILS UPDATED SUCCESSFULLY");
+            window.location.href = "birthdaywishgenerated.html";
+        } else {
+            alert('Error : ' + result.error);
+        }   
+    }     
   }
   )
