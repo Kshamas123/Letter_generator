@@ -230,7 +230,6 @@ app.get('/get-invitation-letter', async (req, res) => {
     }
   });
   
-  
 
 
 app.post('/birthday_wish_letter',async (req, res) => {
@@ -320,7 +319,8 @@ app.post('/congratulations_letter',async (req, res) => {
     const query = 'INSERT INTO congratulations_letter (USERID,SENDERADDRESS,LETTER_DATE,RECEIVERNAME,REASON,SENDERNAME) VALUES (?, ?, ?, ?, ?, ?)';
     const [result] = await pool.query(query, [userId,senderAddress,letterdate,receiverName,reason,senderName]);
 
-    res.status(201).send({ message: 'Data added successfully'});
+    res.status(201).send({ message: 'Data added successfully',
+      letterId: result.insertId,});
 }
  catch (error) {
     console.error('Error during registration:', error.stack);
@@ -328,17 +328,49 @@ app.post('/congratulations_letter',async (req, res) => {
 }
     
   });
+  app.post('/update-congratulation_letter',async (req, res) => {
+
+    try{
+     const{ senderAddress,letterdate,receiverName,reason,senderName,userId,letterId}=req.body;
+     if (!senderAddress || !letterdate || !receiverName||!reason || !senderName || !userId || !letterId) {
+        return res.status(400).send({ error: 'Feilds are required' });
+    }
+    const query = 'UPDATE  congratulations_letter SET USERID=?,SENDERADDRESS=?,LETTER_DATE=?,RECEIVERNAME=?,REASON=?,SENDERNAME=?  where USERID=? AND LETTERID=?';
+    const [result] = await pool.query(query, [userId,senderAddress,letterdate,receiverName,reason,senderName,userId,letterId]);
+  
+    res.status(201).send({
+      message: 'Data updated successfully',
+    });
+}
+ catch (error) {
+    console.error('Error during registration:', error.stack);
+    res.status(500).send({ error: 'Internal Server Error' });
+} 
+  });
+
 
   app.get('/get-congratulations-letter', async (req, res) => {
     try {
-        const userId = req.session.userId;
+        // Extract Authorization header
+      const authHeader = req.headers['authorization'];
+      if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        return res.status(401).send({ error: 'Unauthorized: Missing or invalid token' });
+      }
+  
+      // Decode Base64 and split userId and letterId
+      const token = authHeader.split(' ')[1];
+      const decodedToken = atob(token); // Decode Base64
+      const [userIdPart, letterIdPart] = decodedToken.split(',');
+  
+      const userId = userIdPart.split(':')[1];
+      const letterId = letterIdPart.split(':')[1];
+  
+      if (!userId || !letterId) {
+        return res.status(400).send({ error: 'Invalid token format' });
+      }
 
-        if (!userId) {
-            return res.status(400).send({ error: 'User is not logged in' });
-        }
-
-        const query = 'SELECT * FROM congratulations_letter WHERE USERID = ?';
-        const [results] = await pool.query(query, [userId]);
+        const query = 'SELECT * FROM congratulations_letter WHERE USERID = ? AND LETTERID = ?';
+        const [results] = await pool.query(query, [userId,letterId]);
 
         if (results.length === 0) {
             return res.status(404).send({ error: 'congratulations letter not found' });
@@ -351,6 +383,205 @@ app.post('/congratulations_letter',async (req, res) => {
     }
 });
 
+// Endpoint to create a new leave letter
+app.post('/leave_letter', async (req, res) => {
+  try {
+    const {
+      senderAddress,
+      letterDate,
+      recipientName,
+      recipientDesignation,
+      organizationName,
+      organizationAddress,
+      startDate,
+      endDate,
+      reason,
+      senderName,
+      contactDetails,
+      userId,
+    } = req.body;
+
+    // Check for required fields
+    if (
+      !senderAddress ||
+      !letterDate ||
+      !recipientName ||
+      !recipientDesignation ||
+      !organizationName ||
+      !organizationAddress ||
+      !startDate ||
+      !endDate ||
+      !reason ||
+      !senderName ||
+      !contactDetails ||
+      !userId
+    ) {
+      return res.status(400).send({ error: 'Fields are required' });
+    }
+
+    // SQL query to insert data
+    const query =
+      'INSERT INTO leave_letter (USERID, SENDERADDRESS, LETTER_DATE, RECIPIENTNAME, RECIPIENTDESIGNATION, ORGANIZATIONNAME, ORGANIZATIONADDRESS, STARTDATE, ENDDATE, REASON, SENDERNAME, CONTACTDETAILS) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+
+    // Execute the query
+    const [result] = await pool.query(query, [
+      userId,
+      senderAddress,
+      letterDate,
+      recipientName,
+      recipientDesignation,
+      organizationName,
+      organizationAddress,
+      startDate,
+      endDate,
+      reason,
+      senderName,
+      contactDetails,
+    ]);
+
+    // Send the generated LETTERID back to the frontend
+    res.status(201).send({
+      message: 'Data added successfully',
+      letterId: result.insertId, // `insertId` contains the auto-incremented ID
+    });
+  } catch (error) {
+    console.error('Error during leave letter creation:', error.stack);
+    res.status(500).send({ error: 'Internal Server Error' });
+  }
+});
+
+// Endpoint to update an existing leave letter
+app.post('/update-leave_letter', async (req, res) => {
+  try {
+    const {
+      senderAddress,
+      letterDate,
+      recipientName,
+      recipientDesignation,
+      organizationName,
+      organizationAddress,
+      startDate,
+      endDate,
+      reason,
+      senderName,
+      contactDetails,
+      userId,
+      letterId,
+    } = req.body;
+  
+    // Check for required fields
+    if (
+      !senderAddress ||
+      !letterDate ||
+      !recipientName ||
+      !recipientDesignation ||
+      !organizationName ||
+      !organizationAddress ||
+      !startDate ||
+      !endDate ||
+      !reason ||
+      !senderName ||
+      !contactDetails ||
+      !userId ||
+      !letterId
+    ) {
+      return res.status(400).send({ error: 'Fields are required' });
+    }
+
+    // SQL query to update data
+    const query =
+      'UPDATE leave_letter SET SENDERADDRESS=?, LETTER_DATE=?, RECIPIENTNAME=?, RECIPIENTDESIGNATION=?, ORGANIZATIONNAME=?, ORGANIZATIONADDRESS=?, STARTDATE=?, ENDDATE=?, REASON=?, SENDERNAME=?, CONTACTDETAILS=? WHERE USERID=? AND LETTERID=?';
+
+    // Execute the query
+    const [result] = await pool.query(query, [
+      senderAddress,
+      letterDate,
+      recipientName,
+      recipientDesignation,
+      organizationName,
+      organizationAddress,
+      startDate,
+      endDate,
+      reason,
+      senderName,
+      contactDetails,
+      userId,
+      letterId,
+    ]);
+
+    // Respond with success
+    res.status(200).send({
+      message: 'Data updated successfully',
+    });
+  } catch (error) {
+    console.error('Error during leave letter update:', error.stack);
+    res.status(500).send({ error: 'Internal Server Error' });
+  }
+});
+
+app.get('/get-leave-letter', async (req, res) => {
+  try {
+    // Extract Authorization header
+    const authHeader = req.headers['authorization'];
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return res.status(401).send({ error: 'Unauthorized: Missing or invalid token' });
+    }
+
+    // Decode Base64 and split userId and letterId
+    const token = authHeader.split(' ')[1];
+    const decodedToken = Buffer.from(token, 'base64').toString('utf8'); // Decode Base64
+    const [userIdPart, letterIdPart] = decodedToken.split(',');
+
+    const userId = userIdPart.split(':')[1];
+    const letterId = letterIdPart.split(':')[1];
+
+    if (!userId || !letterId) {
+      return res.status(400).send({ error: 'Invalid token format' });
+    }
+
+    // Query the database for leave letter
+    const query = 'SELECT * FROM leave_letter WHERE USERID = ? AND LETTERID = ?';
+    const [rows] = await pool.query(query, [userId, letterId]);
+
+    if (rows.length === 0) {
+      return res.status(404).send({ error: 'Letter not found' });
+    }
+
+    // Return the leave letter data
+    res.status(200).json(rows[0]);
+  } catch (error) {
+    console.error('Error fetching leave letter data:', error);
+    res.status(500).send({ error: 'Internal Server Error' });
+  }
+});
+
+app.get('/get-letter-counts', async (req, res) => {
+  try {
+    const query = `
+      SELECT COUNT(*) AS total_count
+      FROM (
+        SELECT LETTERID FROM invitation_letter
+        UNION ALL
+        SELECT LETTERID FROM birthday_wish
+        UNION ALL
+        SELECT LETTERID FROM congratulations_letter
+        UNION ALL
+        SELECT LETTERID FROM leave_letter
+      ) AS all_letters;
+    `;
+
+    const [results] = await pool.query(query);
+
+    // Assuming only one row will be returned with the total count
+    const totalCount = results[0].total_count;
+
+    // Send the total count as JSON
+    res.json({ total_letters: totalCount });
+  } catch (error) {
+    console.error('Error fetching letter counts:', error);
+    res.status(500).send({ error: 'Internal Server Error' });
+  }
+});
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);

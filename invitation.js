@@ -71,14 +71,5 @@ else
         alert('Error : ' + result.error);
     }  
 }
-//   const result = await response.json();
-//   if (response.ok) {
-//     sessionStorage.setItem('letterId', result.letterId);
-//       alert("DETAILS COLLECTED SUCCESSFULLY");
-//       window.location.href = "gen-invitation.html";
-//   } else {
-//       alert('Error : ' + result.error);
-//   }
-        
   }
   )

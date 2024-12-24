@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Letters Chart</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Chart.js library -->
+  <style>
+    /* Ensure the canvas is displayed smaller */
+    #lettersChart {
+      width: 200px;  /* Set the width of the canvas */
+      height: 200px; /* Set the height of the canvas */
+      margin: 0 auto; /* Center the canvas */
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <h1>Letter Generation Analytics</h1>
+  <button id="showChart">Show Letters Chart</button>
+  <canvas id="lettersChart" width="200" height="200" style="display:none;"></canvas> <!-- Smaller canvas size -->
+
+  <script>
+    document.getElementById('showChart').addEventListener('click', async () => {
+      try {
+        // Fetch data from the backend
+        const response = await fetch('http://localhost:3000/get-letter-counts'); // Replace with your API endpoint
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        // Data for the chart
+        const labels = ['Total Letters'];
+        const counts = [data.total_letters];
+
+        // Display the chart
+        document.getElementById('lettersChart').style.display = 'block';
+        const ctx = document.getElementById('lettersChart').getContext('2d');
+        new Chart(ctx, {
+          type: 'doughnut', // Chart type (doughnut chart)
+          data: {
+            labels: labels,
+            datasets: [{
+              label: 'Number of Letters Generated',
+              data: counts,
+              backgroundColor: ['#FF6384'],
+              borderColor: ['#FF6384'],
+              borderWidth: 1
+            }]
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              legend: { display: true },
+              tooltip: { enabled: true },
+            },
+            cutout: '70%', // Makes the chart more like a ring
+          },
+          plugins: [{
+            beforeDraw: function(chart) {
+              const ctx = chart.ctx;
+              const width = chart.width;
+              const height = chart.height;
+              const data = chart.data.datasets[0].data[0]; // Total letters value
+              ctx.restore();
+              ctx.font = '24px Arial'; // Font style
+              ctx.fillStyle = '#FF6384'; // Text color
+              ctx.textAlign = 'center';
+              ctx.textBaseline = 'middle';
+              ctx.fillText(data, width / 2, height / 2); // Draw text at the center
+              ctx.save();
+            }
+          }]
+        });
+      } catch (error) {
+        console.error('Error fetching or displaying data:', error);
+      }
+    });
+  </script>
+</body>
+</html>
+
+
+
+ 

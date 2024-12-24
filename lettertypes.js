@@ -6,7 +6,7 @@ const letterPages = {
   "Invitation Letter": "invitation.html",
   "Birthday Letter": "birthdaywish.html",
   "Congratulations Letter": "congrats.html",
-  "Letter D": "letterD.html",
+  "Leave Letter": "leave_letter.html",
   "Letter E": "letterE.html",
   "Letter F": "letterF.html",
   "Letter G": "letterG.html",

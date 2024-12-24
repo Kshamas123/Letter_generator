@@ -1,0 +1,108 @@
+/* Basic reset and layout */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    padding: 20px;
+  }
+  
+  .header {
+    background-color: #396f66;
+    color: white;
+    padding: 10px 0;
+    text-align: center;
+  }
+  
+  h1 {
+    font-size: 2em;
+  }
+  
+  /* Main container for the letter and download options */
+  .container {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 20px;
+  }
+  
+  /* Left side: Letter preview (3/4 of the container width) */
+  .letter-preview {
+    flex: 3; /* 3 parts of the space */
+    margin-right: 20px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 75%; /* Ensure it takes 75% of the width */
+  }
+  
+  h2 {
+    font-size: 1.5em;
+    margin-bottom: 15px;
+    color: #396f66;
+  }
+  
+  #finalLetter {
+    margin-top: 20px;
+  }
+  
+  p {
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  
+  strong {
+    color: black;
+  }
+  
+  /* Right side: Download options (1/4 of the container width) */
+  .download-container {
+    flex: 1; /* 1 part of the space */
+    text-align: center;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 25%; /* Ensure it takes 25% of the width */
+  }
+  
+  button {
+    background-color: #396f66;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    margin: 10px 0;
+    font-size: 1em;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+  
+  button:hover {
+    background-color: #2d5c52; /* Darken the background color on hover */
+    transform: translateY(-3px); /* Slightly lift the button on hover */
+  }
+  
+  /* Responsive layout for smaller screens */
+  @media screen and (max-width: 768px) {
+    .container {
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .letter-preview, .download-container {
+      width: 90%; /* Full width on small screens */
+      margin-bottom: 20px; /* Space between sections */
+    }
+  
+    button {
+      width: 100%;
+    }
+  }
+  

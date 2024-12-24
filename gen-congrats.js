@@ -10,13 +10,27 @@ function formatDate(dateString) {
 // Function to fetch congratulation letter data from the backend
 async function fetchCongratulationData() {
   try {
+    const userId = sessionStorage.getItem('userId'); // Get userId from sessionStorage
+    const letterId = sessionStorage.getItem('congratsletterid'); // Get letterId from sessionStorage
+
+    if (!userId || !letterId) {
+      throw new Error('Missing userId or letterId in sessionStorage');
+    }
+
+    // Combine userId and letterId into a single token-like format
+    const token = `UserID:${userId},LetterID:${letterId}`;
+
     const response = await fetch('http://localhost:3000/get-congratulations-letter', {
       method: 'GET',
-      credentials: 'include', // Allow cookies/session data to be sent
+      credentials: 'include', // Allow cookies/session data
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${btoa(token)}`, // Base64-encoded Authorization token
+      },
     });
 
     if (!response.ok) {
-      throw new Error('Failed to fetch congratulation letter data');
+      throw new Error('Failed to fetch letter data');
     }
 
     const letterData = await response.json();
