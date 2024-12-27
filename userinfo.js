@@ -1,19 +1,16 @@
-// When the "View Users" button is clicked, display the list of users
-document.getElementById("view-users").addEventListener("click", function () {
-    // Show the User Information section and hide the others
-    document.getElementById("user-info").style.display = "block";
-    document.getElementById("analytics").style.display = "none";
-    document.getElementById("chart").style.display = "none";
+// Show the "User Information" section by default when the page loads
+document.getElementById("user-info").style.display = "block";
+document.getElementById("analytics").style.display = "none";
+document.getElementById("chart").style.display = "none";
+
+// When the "View Users" button is clicked, fetch and display users
+document.getElementById("view-users-list").addEventListener("click", function () {
+    fetchUsers(); // Fetch and display the list of users when clicked
 });
 
 // When the "View Analytics" button is clicked, redirect to chart.html
 document.getElementById("view-analytics").addEventListener("click", function () {
     window.location.href = "chart.html"; // Redirect to chart.html
-});
-
-// When the "View Users" button inside the User Info section is clicked
-document.getElementById("view-users-list").addEventListener("click", function () {
-    fetchUsers();
 });
 
 // Fetch the list of users and display it
@@ -68,19 +65,3 @@ function showUserDetails(userId) {
         alert('Error fetching user details');
       });
 }
-
-// Function to fetch total letter count from the server
-function fetchTotalLetterCount() {
-    fetch('/letters/total')
-      .then(response => response.json())  
-      .then(data => {
-        const totalLetters = data.total_letters;
-        document.getElementById("total-letters-count").innerText = `Total Letters: ${totalLetters}`;
-      })
-      .catch(error => {
-        console.error('Error fetching total letter count:', error);
-        alert('Error fetching total letter count');
-      });
-}
-
-fetchTotalLetterCount();

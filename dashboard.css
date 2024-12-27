@@ -1,125 +1,180 @@
 /* Global Reset */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Body and layout */
+body {
+  font-family: Arial, sans-serif;
+  display: flex;
+  height: 100vh;
+  background-color: #f4f4f4;
+  overflow: hidden; /* Prevent scrolling while animations run */
+}
+
+/* Sidebar */
+.sidebar {
+  width: 250px;
+  background-color: #396f66; /* Updated background color */
+  color: white;
+  padding: 20px;
+  height: 100vh;
+  transition: all 0.3s ease;
+  position: fixed; /* Keep sidebar fixed */
+  top: 0;
+  left: -250px; /* Start from off-screen */
+  animation: slideIn 0.5s forwards ease-in-out; /* Animation to slide in */
+}
+
+/* Sidebar Links */
+.sidebar h2 {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.sidebar ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.sidebar li {
+  margin: 20px 0;
+}
+
+.sidebar a {
+  color: white;
+  text-decoration: none;
+  font-size: 18px;
+  display: block;
+  padding: 10px;
+  transition: background-color 0.3s ease;
+}
+
+.sidebar a:hover {
+  background-color: #2c5d4f;
+}
+
+.sidebar a.active {
+  background-color: #2c5d4f;
+}
+
+/* Sidebar animation: slide in */
+@keyframes slideIn {
+  0% {
+      left: -250px; /* Initially off-screen */
   }
-  
-  /* Body and layout */
-  body {
-    font-family: Arial, sans-serif;
-    display: flex;
-    height: 100vh;
-    background-color: #f4f4f4;
+  100% {
+      left: 0; /* Slide to visible position */
   }
-  
-  /* Sidebar */
-  .sidebar {
-    width: 250px;
-    background-color: #396f66; /* Updated background color */
-    color: white;
-    padding: 20px;
-    height: 100vh;
-    transition: all 0.3s ease;
-    position: fixed; /* Keep sidebar fixed */
-    top: 0;
-    left: 0;
-  }
-  
-  /* Sidebar Links */
-  .sidebar h2 {
-    text-align: center;
-    margin-bottom: 40px;
-  }
-  
-  .sidebar ul {
-    list-style-type: none;
-    padding: 0;
-  }
-  
-  .sidebar li {
-    margin: 20px 0;
-  }
-  
-  .sidebar a {
-    color: white;
-    text-decoration: none;
-    font-size: 18px;
-    display: block;
-    padding: 10px;
-    transition: background-color 0.3s ease;
-  }
-  
-  .sidebar a:hover {
-    background-color: #2c5d4f;
-  }
-  
-  .sidebar a.active {
-    background-color: #2c5d4f;
-  }
-  
-  /* Content Area */
-  .content {
-    margin-left: 250px; /* Offset content to the right of the fixed sidebar */
-    padding: 20px;
-    flex-grow: 1;
-    overflow-x: auto; /* Allow horizontal scrolling if content overflows */
-  }
-  
-  .users {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 20px;
-  }
-  
-  .user-list,
-  .user-details {
-    width: 45%;
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  /* Chart Styling */
-  #chart {
-    width: 100%;
-    height: 300px;
-    background-color: #ecf0f1;
-    border-radius: 10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 18px;
-    color: #7f8c8d;
-  }
-  
-  #analytics,
-  #user-info {
-    animation: fadeIn 0.5s forwards;
-  }
-  
-  @keyframes fadeIn {
-    from {
+}
+
+/* Content Area */
+.content {
+  margin-left: 250px; /* Offset content to the right of the fixed sidebar */
+  padding: 20px;
+  flex-grow: 1;
+  overflow-x: auto; /* Allow horizontal scrolling if content overflows */
+  animation: fadeIn 0.7s ease-out forwards; /* Fade-in animation */
+}
+
+@keyframes fadeIn {
+  0% {
       opacity: 0;
-    }
-    to {
+      transform: translateY(20px); /* Start slightly below */
+  }
+  100% {
       opacity: 1;
-    }
+      transform: translateY(0); /* Set final position */
   }
-  
-  .chart-container {
-    width: 350px; /* Adjust width for the chart */
-    height: 300px;
-    margin-left: 20px;
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Users section */
+.users {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  animation: slideUp 0.5s ease-out forwards; /* Slide-up effect */
+}
+
+@keyframes slideUp {
+  0% {
+      opacity: 0;
+      transform: translateY(50px); /* Start from below */
   }
-  
-  .chart-container canvas {
-    width: 100%;
-    height: auto;
+  100% {
+      opacity: 1;
+      transform: translateY(0); /* Set final position */
   }
- 
+}
+
+/* User List and User Details */
+.user-list,
+.user-details {
+  width: 45%;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 0.7s ease-out forwards;
+}
+
+/* Chart Styling */
+#chart {
+  width: 100%;
+  height: 300px;
+  background-color: #ecf0f1;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+  color: #7f8c8d;
+  animation: fadeIn 1s ease-out forwards; /* Fade-in for the chart */
+}
+
+#analytics,
+#user-info {
+  animation: fadeIn 1s ease-out forwards;
+}
+
+/* Chart Container */
+.chart-container {
+  width: 350px; /* Adjust width for the chart */
+  height: 300px;
+  margin-left: 20px;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  animation: slideUp 0.6s ease-out forwards;
+}
+
+.chart-container canvas {
+  width: 100%;
+  height: auto;
+}
+
+/* Hover effect on links in sidebar */
+.sidebar a:hover {
+  background-color: #2c5d4f;
+  transform: scale(1.05); /* Slight scale on hover */
+  transition: transform 0.3s ease;
+}
+
+/* Buttons with hover effect */
+button {
+  background-color: #396f66; /* Sidebar color */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+button:hover {
+  background-color: #2c5d4f;
+  transform: scale(1.05);
+}
