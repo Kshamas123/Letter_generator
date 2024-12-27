@@ -26,6 +26,51 @@
       text-align: center;
     }
 
+    
+  /* Sidebar */
+  .sidebar {
+    width: 250px;
+    background-color: #396f66; /* Updated background color */
+    color: white;
+    padding: 20px;
+    height: 100vh;
+    transition: all 0.3s ease;
+    position: fixed; /* Keep sidebar fixed */
+    top: 0;
+    left: 0;
+  }
+  
+  /* Sidebar Links */
+  .sidebar h2 {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  
+  .sidebar ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .sidebar li {
+    margin: 20px 0;
+  }
+  
+  .sidebar a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    display: block;
+    padding: 10px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .sidebar a:hover {
+    background-color: #2c5d4f;
+  }
+  
+  .sidebar a.active {
+    background-color: #2c5d4f;
+  }
     h1 {
       font-size: 2.5rem;
       color: #396f66;
@@ -65,6 +110,7 @@
       align-items: center;
       margin-top: 50px;
       animation: fadeIn 1.5s ease-out;
+      
     }
 
     @keyframes fadeIn {
@@ -117,8 +163,9 @@
       font-size: 1.5rem;
       color: #FFCD56;
       font-weight: bold;
-      margin-bottom: 20px;
+      margin-bottom: 50px;
       animation: pulse 2s infinite;
+      margin-left: 20px;
     }
 
     @keyframes pulse {
@@ -137,6 +184,13 @@
   </style>
 </head>
 <body>
+  <div class="sidebar">
+    <h2>Admin Dashboard</h2>
+    <ul>
+      <li><a href="chart.html" id="view-analytics">View Analytics</a></li>
+      <li><a href="#" id="view-users">User Information</a></li>
+    </ul>
+  </div>
   <h1>Letter Generation Analytics</h1>
   <div class="placeholder">
     📈 Want to explore how many letters we generate daily? Click the button below to find out!
