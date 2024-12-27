@@ -7,20 +7,21 @@
   }
   body{
     display: flex;
-    
+    background-color: #396f66;
+    background: linear-gradient(to right, #e2e2e2, #c9d6ff);
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background: url(https://img.freepik.com/premium-photo/abstract-dynamic-gradient-background_889227-265.jpg) no-repeat;
+    background-color:#ebf3f1;
     background-size: cover;
     background-position: center;
   }
   .wrapper{
     width: 420px;
-    background: transparent;
+    background-color: #467d74;
     border: 2px solid rgba(255, 255, 255, .2);
     backdrop-filter: blur(9px);
-    color: #fff;
+    color: #0c0c0c;
     border-radius: 12px;
     padding: 30px 40px;
   }
@@ -48,7 +49,7 @@
     padding: 20px 45px 20px 20px;
   }
   .input-box input::placeholder{
-    color: #fff;
+    color: #050505;
   }
   .input-box i{
     position: absolute;
