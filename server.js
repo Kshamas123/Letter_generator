@@ -623,16 +623,14 @@ app.get('/user/:id', async (req, res) => {
   const userId = req.params.id;
 
   try {
-    console.log('Fetching user with ID:', userId);  // Log user ID being fetched
-
-    // Get user details using the pool
+    // Fetch user details by ID
     const [userResults] = await pool.execute('SELECT * FROM USER_DETAILS WHERE USERID = ?', [userId]);
 
     if (userResults.length === 0) {
       return res.status(404).json({ error: 'User not found' });
     }
 
-    // Get letter counts using JOIN and GROUP BY
+    // Fetch letter counts for the user
     const [letterResults] = await pool.execute(`
       SELECT 
         SUM(CASE WHEN lt.LETTER_TYPE = 'invitation_letter' THEN 1 ELSE 0 END) AS invitation_count,
@@ -643,9 +641,6 @@ app.get('/user/:id', async (req, res) => {
       WHERE lt.USERID = ?
     `, [userId]);
 
-    console.log('User data:', userResults[0]);  // Log the fetched user data
-    console.log('Letter counts:', letterResults[0]);  // Log the letter counts
-
     const userData = userResults[0];
     const letterCounts = letterResults[0];
 
@@ -653,18 +648,14 @@ app.get('/user/:id', async (req, res) => {
       user: userData,
       letter_counts: letterCounts
     });
-
   } catch (err) {
-    console.error('Error fetching user details:', err);  // Log the error for debugging
-    res.status(500).json({ error: 'Internal Server Error', details: err.message });
+    console.error('Error fetching user details:', err);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 });
-
-
-  
- app.get('/letters/total', async (req, res) => {
+app.get('/letters/total', async (req, res) => {
   try {
-    const [results] = await connection.promise().query(`
+    const [results] = await pool.execute(`
       SELECT COUNT(*) AS Total_Letters
       FROM (
         SELECT LETTERID FROM invitation_letter
@@ -676,22 +667,20 @@ app.get('/user/:id', async (req, res) => {
         SELECT LETTERID FROM leave_letter
       ) AS all_letters
     `);
-    res.json(results[0]);
+
+    // Return the count of all letters as a response
+    res.json({
+      total_letters: results[0].Total_Letters
+    });
   } catch (err) {
     console.error('Error fetching total letter count:', err);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
 
-app.get('/letters/test', async (req, res) => {
-  try {
-    const [results] = await pool.execute('SELECT 1');
-    res.json(results);
-  } catch (err) {
-    console.error('Error with test query:', err);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-});
+
+
+
 
 
 
