@@ -3,22 +3,182 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Letters Chart</title>
+  <title>Letters Count</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Chart.js library -->
   <style>
-    /* Ensure the canvas is displayed smaller */
-    #lettersChart {
-      width: 200px;  /* Set the width of the canvas */
-      height: 200px; /* Set the height of the canvas */
-      margin: 0 auto; /* Center the canvas */
-      display: block;
+     * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
+
+    body {
+      background-color: #f0f4f8;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #333;
+      transition: background-color 0.3s ease;
+      height: 100vh;
+      justify-content: center;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      color: #396f66;
+      margin-bottom: 40px;
+      text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+      animation: slideInFromTop 1s ease-out;
+    }
+
+    @keyframes slideInFromTop {
+      0% { transform: translateY(-30px); opacity: 0; }
+      100% { transform: translateY(0); opacity: 1; }
+    }
+
+    button {
+      background-color: #396f66;
+      color: white;
+      padding: 15px 35px;
+      border: 2px solid transparent;
+      border-radius: 10px;
+      font-weight: bold;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      cursor: pointer;
+      font-size: 1.1rem;
+      transition: transform 0.3s ease, background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #338c75;
+      transform: scale(1.1);
+    }
+
+    .letter-stats-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      margin-top: 50px;
+      animation: fadeIn 1.5s ease-out;
+    }
+
+    @keyframes fadeIn {
+      0% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+
+    .letter-charts-row {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin-top: 40px;
+      animation: fadeIn 2s ease-out;
+    }
+
+    .chart-container {
+      width: 220px;
+      height: 220px;
+      position: relative;
+      border-radius: 15px;
+      overflow: hidden;
+    }
+
+    .chart-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #333;
+      text-align: center;
+      padding: 10px;
+    }
+
+    .letter-stats {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .letter-stats p {
+      font-size: 1.2rem;
+      color: #555;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+
+    /* Placeholder animation */
+    .placeholder {
+      font-size: 1.5rem;
+      color: #FFCD56;
+      font-weight: bold;
+      margin-bottom: 20px;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.1); opacity: 0.8; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    /* Added hover effect for individual charts */
+    .chart-container:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
   </style>
 </head>
 <body>
   <h1>Letter Generation Analytics</h1>
-  <button id="showChart">Show Letters Chart</button>
-  <canvas id="lettersChart" width="200" height="200" style="display:none;"></canvas> <!-- Smaller canvas size -->
+  <div class="placeholder">
+    📈 Want to explore how many letters we generate daily? Click the button below to find out!
+</div>
+  <button id="showChart">Show Analytics</button>
+
+  <!-- Display letter counts below the button -->
+  <div class="letter-stats-container" id="letterCounts" style="display:none;">
+    <!-- Total Letters -->
+    <div class="letter-stats">
+      <h2>Total Letters</h2>
+      <p id="totalLetters">Loading...</p>
+    </div>
+  </div>
+
+  <!-- Total Letters Chart -->
+  <div class="letter-stats-container" id="totalLettersChart" style="display:none;">
+    <div class="chart-container">
+      <canvas id="lettersChart" width="220" height="220"></canvas> <!-- Total Letters chart -->
+      <div class="chart-text" id="totalLettersText">Loading...</div>
+    </div>
+  </div>
+
+  <!-- Individual Letter Type Charts -->
+  <div class="letter-charts-row" id="letterCharts" style="display:none;">
+    <div class="chart-container">
+      <canvas id="invitationLettersChart" width="200" height="200"></canvas> <!-- Invitation Letters chart -->
+      <div class="chart-text" id="invitationLettersText">Loading...</div>
+    </div>
+    <div class="chart-container">
+      <canvas id="birthdayLettersChart" width="200" height="200"></canvas> <!-- Birthday Letters chart -->
+      <div class="chart-text" id="birthdayLettersText">Loading...</div>
+    </div>
+    <div class="chart-container">
+      <canvas id="congratulationsLettersChart" width="200" height="200"></canvas> <!-- Congratulations Letters chart -->
+      <div class="chart-text" id="congratulationsLettersText">Loading...</div>
+    </div>
+    <div class="chart-container">
+      <canvas id="leaveLettersChart" width="200" height="200"></canvas> <!-- Leave Letters chart -->
+      <div class="chart-text" id="leaveLettersText">Loading...</div>
+    </div>
+  </div>
 
   <script>
     document.getElementById('showChart').addEventListener('click', async () => {
@@ -31,20 +191,25 @@
 
         const data = await response.json();
 
-        // Data for the chart
-        const labels = ['Total Letters'];
-        const counts = [data.total_letters];
+        // Update the individual letter counts
+        document.getElementById('totalLetters').textContent = data.total_letters;
 
-        // Display the chart
-        document.getElementById('lettersChart').style.display = 'block';
-        const ctx = document.getElementById('lettersChart').getContext('2d');
-        new Chart(ctx, {
-          type: 'doughnut', // Chart type (doughnut chart)
+        // Update chart center text after the data is fetched
+        document.getElementById('totalLettersText').textContent = `Total Letters: ${data.total_letters}`;
+
+        // Display the letter stats
+        document.getElementById('letterCounts').style.display = 'block';
+
+        // Display the total letters chart
+        document.getElementById('totalLettersChart').style.display = 'block';
+        const totalChartCtx = document.getElementById('lettersChart').getContext('2d');
+        new Chart(totalChartCtx, {
+          type: 'doughnut',
           data: {
-            labels: labels,
+            labels: ['Total Letters'],
             datasets: [{
-              label: 'Number of Letters Generated',
-              data: counts,
+              label: 'Total Letters',
+              data: [data.total_letters],
               backgroundColor: ['#FF6384'],
               borderColor: ['#FF6384'],
               borderWidth: 1
@@ -53,34 +218,64 @@
           options: {
             responsive: true,
             plugins: {
-              legend: { display: true },
+              legend: { display: false },
               tooltip: { enabled: true },
             },
-            cutout: '70%', // Makes the chart more like a ring
+            cutout: '70%',
           },
-          plugins: [{
-            beforeDraw: function(chart) {
-              const ctx = chart.ctx;
-              const width = chart.width;
-              const height = chart.height;
-              const data = chart.data.datasets[0].data[0]; // Total letters value
-              ctx.restore();
-              ctx.font = '24px Arial'; // Font style
-              ctx.fillStyle = '#FF6384'; // Text color
-              ctx.textAlign = 'center';
-              ctx.textBaseline = 'middle';
-              ctx.fillText(data, width / 2, height / 2); // Draw text at the center
-              ctx.save();
-            }
-          }]
         });
+
+        // Display the individual charts
+        document.getElementById('letterCharts').style.display = 'flex';
+
+        const createChart = (ctx, data, label, color, textId) => {
+          new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+              labels: [label],
+              datasets: [{
+                label: label,
+                data: [data],
+                backgroundColor: [color],
+                borderColor: [color],
+                borderWidth: 1
+              }]
+            },
+            options: {
+              responsive: true,
+              plugins: {
+                legend: { display: false },
+                tooltip: { enabled: true },
+              },
+              cutout: '70%',
+            },
+          });
+
+          // Set the centered text with name and count
+          document.getElementById(textId).innerHTML = `${label}: ${data}`;
+        };
+
+        createChart(document.getElementById('invitationLettersChart').getContext('2d'), data.invitation_count, 'Invitation Letters', '#36A2EB', 'invitationLettersText');
+        createChart(document.getElementById('birthdayLettersChart').getContext('2d'), data.birthday_wish_count, 'Birthday Wishes', '#FFCD56', 'birthdayLettersText');
+        createChart(document.getElementById('congratulationsLettersChart').getContext('2d'), data.congratulations_count, 'Congratulations Letters', '#FF9F40', 'congratulationsLettersText');
+        createChart(document.getElementById('leaveLettersChart').getContext('2d'), data.leave_letter_count, 'Leave Letters', '#4BC0C0', 'leaveLettersText');
+        
       } catch (error) {
-        console.error('Error fetching or displaying data:', error);
+        console.error('Error fetching data:', error);
       }
     });
   </script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
 
 
 

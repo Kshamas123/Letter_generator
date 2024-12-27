@@ -554,29 +554,53 @@ app.get('/get-leave-letter', async (req, res) => {
     res.status(500).send({ error: 'Internal Server Error' });
   }
 });
-
 app.get('/get-letter-counts', async (req, res) => {
   try {
     const query = `
-      SELECT COUNT(*) AS total_count
+      SELECT 
+        letter_type,
+        COUNT(*) AS count
       FROM (
-        SELECT LETTERID FROM invitation_letter
+        SELECT 'invitation_letter' AS letter_type FROM invitation_letter
         UNION ALL
-        SELECT LETTERID FROM birthday_wish
+        SELECT 'birthday_wish' AS letter_type FROM birthday_wish
         UNION ALL
-        SELECT LETTERID FROM congratulations_letter
+        SELECT 'congratulations_letter' AS letter_type FROM congratulations_letter
         UNION ALL
-        SELECT LETTERID FROM leave_letter
-      ) AS all_letters;
+        SELECT 'leave_letter' AS letter_type FROM leave_letter
+      ) AS all_letters
+      GROUP BY letter_type;
     `;
 
     const [results] = await pool.query(query);
 
-    // Assuming only one row will be returned with the total count
-    const totalCount = results[0].total_count;
+    // Organize counts into an object for easier access
+    const counts = {
+      invitation_count: 0,
+      birthday_wish_count: 0,
+      congratulations_count: 0,
+      leave_letter_count: 0,
+      total_letters: 0
+    };
 
-    // Send the total count as JSON
-    res.json({ total_letters: totalCount });
+    results.forEach(row => {
+      if (row.letter_type === 'invitation_letter') {
+        counts.invitation_count = row.count;
+      } else if (row.letter_type === 'birthday_wish') {
+        counts.birthday_wish_count = row.count;
+      } else if (row.letter_type === 'congratulations_letter') {
+        counts.congratulations_count = row.count;
+      } else if (row.letter_type === 'leave_letter') {
+        counts.leave_letter_count = row.count;
+      }
+    });
+
+    // Calculate the total count
+    counts.total_letters = counts.invitation_count + counts.birthday_wish_count + 
+                           counts.congratulations_count + counts.leave_letter_count;
+
+    // Send the counts as JSON
+    res.json(counts);
   } catch (error) {
     console.error('Error fetching letter counts:', error);
     res.status(500).send({ error: 'Internal Server Error' });
