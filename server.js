@@ -643,7 +643,7 @@ app.get('/user/:id', async (req, res) => {
 
     const userData = userResults[0];
     const letterCounts = letterResults[0];
-    console.log(letterCounts);
+
     res.json({
       user: userData,
       letter_counts: letterCounts
