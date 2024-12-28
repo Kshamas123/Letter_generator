@@ -609,7 +609,7 @@
   app.get('/users', async (req, res) => {
     try {
         console.log('Fetching users...');
-        const [results] = await pool.query('SELECT USERID, USERNAME FROM USER_DETAILS'); // No .promise() needed
+        const [results] = await pool.query('SELECT USERNAME FROM USER_DETAILS'); // No .promise() needed
         console.log('Results:', results);
         res.json(results);
     } catch (err) {
@@ -643,7 +643,7 @@ app.get('/user/:id', async (req, res) => {
 
     const userData = userResults[0];
     const letterCounts = letterResults[0];
-
+    console.log(letterCounts);
     res.json({
       user: userData,
       letter_counts: letterCounts

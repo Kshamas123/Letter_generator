@@ -27,7 +27,7 @@ function fetchUsers() {
           userBox.classList.add("user-box");
           userBox.innerHTML = `
             <h4>${user.USERNAME}</h4>
-            <p>${user.USEREMAIL}</p>
+          
           `;
           userBox.addEventListener("click", () => showUserDetails(user.USERID)); // Show details when clicked
           userListContainer.appendChild(userBox);
@@ -45,7 +45,7 @@ function showUserDetails(userId) {
       .then(response => response.json())
       .then(data => {
         const userDetailsContainer = document.getElementById("user-details");
-
+console.log(userDetailsContainer);
         const { user, letter_counts } = data;
 
         // Display the user's details
