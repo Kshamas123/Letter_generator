@@ -29,7 +29,7 @@ function fetchUsers() {
             <h4>${user.USERNAME}</h4>
             
           `;
-          userBox.addEventListener("click", () => showUserDetails(user.USERID)); // Show details when clicked
+          userBox.addEventListener("click", () => showUserDetails(user.USERNAME)); // Show details when clicked
           userListContainer.appendChild(userBox);
         });
       })
@@ -40,28 +40,35 @@ function fetchUsers() {
 }
 
 // Show user details when a user box is clicked
-function showUserDetails(userId) {
-    fetch(`http://localhost:3000/user/${userId}`) // Use the correct backend URL
-      .then(response => response.json())
-      .then(data => {
-        const userDetailsContainer = document.getElementById("user-details");
-
-        const { user, letter_counts } = data;
-
-        // Display the user's details
-        userDetailsContainer.innerHTML = `
-          <h4>User Details</h4>
-          <p><strong>Name:</strong> ${user.USERNAME}</p>
-          <p><strong>Email:</strong> ${user.USEREMAIL}</p>
-          <h5>Letter Counts</h5>
-          <p><strong>Invitation Letters:</strong> ${letter_counts.invitation_count}</p>
-          <p><strong>Birthday Wishes:</strong> ${letter_counts.birthday_count}</p>
-          <p><strong>Congratulations Letters:</strong> ${letter_counts.congratulations_count}</p>
-          <p><strong>Leave Letters:</strong> ${letter_counts.leave_count}</p>
-        `;
-      })
-      .catch(error => {
-        console.error('Error fetching user details:', error);
-        alert('Error fetching user details');
-      });
+function showUserDetails(username) {
+  fetch(`http://localhost:3000/user/${username}`) // Pass the username to the backend
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('User not found or server error');
+      }
+      return response.json();
+    })
+    .then(data => {
+      const userDetailsContainer = document.getElementById("user-details");
+      console.log(data)
+      const { user, letter_counts } = data;
+      console.log(user)
+      console.log(letter_counts[0])
+      // Display the user's details
+      userDetailsContainer.innerHTML = `
+    
+        <p><strong>Name:</strong> ${user.USERNAME}</p>
+        <p><strong>Email:</strong> ${user.USEREMAIL}</p>
+        <h4>Letter Counts</h4>
+        <p><strong>Invitation Letters:</strong> ${letter_counts[0].invitation_count}</p>
+        <p><strong>Birthday Wishes:</strong> ${letter_counts[0].birthday_count}</p>
+        <p><strong>Congratulations Letters:</strong> ${letter_counts[0].congratulations_count}</p>
+        <p><strong>Leave Letters:</strong> ${letter_counts[0].leave_count}</p>
+        <p><strong>Total Letters:</strong> ${letter_counts[0].total_count}</p?
+      `;
+    })
+    .catch(error => {
+      console.error('Error fetching user details:', error);
+      alert('Error fetching user details');
+    });
 }

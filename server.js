@@ -25,7 +25,7 @@
   const pool = mysql.createPool({
       host: 'localhost',
       user: 'root',
-      password: 'megha@102',
+      password: 'kshama123',
       database: 'letter_generator_dbms',
       waitForConnections: true,
       connectionLimit: 10,
@@ -619,30 +619,44 @@
 });
 
 
-app.get('/user/:id', async (req, res) => {
-  const userId = req.params.id;
+app.get('/user/:USERNAME', async (req, res) => {
+  const username = req.params.USERNAME;
 
   try {
-    // Fetch user details by ID
-    const [userResults] = await pool.execute('SELECT * FROM USER_DETAILS WHERE USERID = ?', [userId]);
+    // Fetch user details by USERNAME
+    const [userResults] = await pool.execute('SELECT * FROM USER_DETAILS WHERE USERNAME = ?', [username]);
 
     if (userResults.length === 0) {
       return res.status(404).json({ error: 'User not found' });
     }
 
+    const userId = userResults[0].USERID; // Retrieve USERID from the user details
+
     // Fetch letter counts for the user
-    const [letterResults] = await pool.execute(`
-      SELECT 
-        SUM(CASE WHEN lt.LETTER_TYPE = 'invitation_letter' THEN 1 ELSE 0 END) AS invitation_count,
-        SUM(CASE WHEN lt.LETTER_TYPE = 'birthday_wish' THEN 1 ELSE 0 END) AS birthday_count,
-        SUM(CASE WHEN lt.LETTER_TYPE = 'congratulations_letter' THEN 1 ELSE 0 END) AS congratulations_count,
-        SUM(CASE WHEN lt.LETTER_TYPE = 'leave_letter' THEN 1 ELSE 0 END) AS leave_count
-      FROM letter_logs lt
-      WHERE lt.USERID = ?
-    `, [userId]);
+    const [letterCounts] = await pool.execute(`
+      SELECT
+        (SELECT COUNT(*) FROM invitation_letter WHERE USERID = ?) AS invitation_count,
+        (SELECT COUNT(*) FROM birthday_wish WHERE USERID = ?) AS birthday_count,
+        (SELECT COUNT(*) FROM congratulations_letter WHERE USERID = ?) AS congratulations_count,
+        (SELECT COUNT(*) FROM leave_letter WHERE USERID = ?) AS leave_count,
+        (
+          (SELECT COUNT(*) FROM invitation_letter WHERE USERID = ?) +
+          (SELECT COUNT(*) FROM birthday_wish WHERE USERID = ?) +
+          (SELECT COUNT(*) FROM congratulations_letter WHERE USERID = ?) +
+          (SELECT COUNT(*) FROM leave_letter WHERE USERID = ?)
+        ) AS total_count;
+    `, [userId, userId, userId, userId, userId, userId, userId, userId]);
+    
+    
+    const letterData = letterCounts[0];
+    console.log(`Letter counts for user ${userId}:`, letterData);
 
     const userData = userResults[0];
+<<<<<<< HEAD
     const letterCounts = letterResults[0];
+=======
+  
+>>>>>>> d41b35583fbb2bdd915a37bbc86477766d0cff0e
 
     res.json({
       user: userData,
@@ -653,6 +667,7 @@ app.get('/user/:id', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
 app.get('/letters/total', async (req, res) => {
   try {
     const [results] = await pool.execute(`
