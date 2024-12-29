@@ -75,4 +75,28 @@ body {
   .letter-button:focus {
     outline: none;
   }
-  
+/* Circular Button Styling */
+/* Circular Button Styling */
+/* Circular Button Styling */
+.user-icon-container {
+  position: fixed; /* Make it fixed at the top-right */
+  top: 60px; /* Adjust the distance from the top */
+  right: 50px; /* Adjust the distance from the right */
+  z-index: 1000; /* Ensure it stays above other elements */
+}
+
+.user-icon {
+  background-color: #468377; /* Match your theme */
+  border: none;
+  border-radius: 50%;
+  width: 40px; /* Size of the button */
+  height: 40px;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.user-icon:hover {
+  background-color: #254943;
+  transform: scale(1.1);
+}

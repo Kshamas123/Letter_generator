@@ -25,7 +25,7 @@
   const pool = mysql.createPool({
       host: 'localhost',
       user: 'root',
-      password: 'kshama123',
+      password: 'megha@102',
       database: 'letter_generator_dbms',
       waitForConnections: true,
       connectionLimit: 10,
@@ -652,11 +652,7 @@ app.get('/user/:USERNAME', async (req, res) => {
     console.log(`Letter counts for user ${userId}:`, letterData);
 
     const userData = userResults[0];
-<<<<<<< HEAD
-    const letterCounts = letterResults[0];
-=======
-  
->>>>>>> d41b35583fbb2bdd915a37bbc86477766d0cff0e
+
 
     res.json({
       user: userData,
