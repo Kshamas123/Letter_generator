@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Letter Generation Report</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body and layout */
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            background-color: #396f66; /* Sidebar color */
+            color: white;
+            padding: 20px;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: -250px; /* Initially off-screen */
+            animation: slideInSidebar 0.6s forwards ease-out; /* Slide-in animation */
+        }
+
+        /* Sidebar animation */
+        @keyframes slideInSidebar {
+            from {
+                left: -250px; /* Start off-screen */
+            }
+            to {
+                left: 0; /* Slide to its final position */
+            }
+        }
+
+        /* Sidebar Links */
+        .sidebar h2 {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .sidebar ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .sidebar li {
+            margin: 20px 0;
+        }
+
+        .sidebar a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            display: block;
+            padding: 10px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .sidebar a:hover {
+            background-color: #4c9085;
+            transform: scale(1.05); /* Slight zoom on hover */
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 250px; /* Offset to make room for the sidebar */
+            padding: 20px;
+            flex-grow: 1;
+            background-color: #fff;
+        }
+
+        h1 {
+            color:#396f66;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        canvas {
+            display: block;
+            margin: 0 auto;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h2>Admin Dashboard</h2>
+        <ul>
+            <li><a href="chart.html" id="view-analytics">View Analytics</a></li>
+            <li><a href="userinfo.html" id="view-users">User Information</a></li>
+            <li><a href="#" id="Letter-logs-by-date">Letter Logs by date</a></li>
+        </ul>
+    </div>
+    
+    <div class="main-content">
+        <h1>Daily Letter Generation Report</h1>
+        <div class="container">
+            <canvas id="letterChart"></canvas>
+        </div>
+    </div>
+
+    <script>
+        // Fetch data from the backend
+        fetch('http://localhost:3000/letter-stats')
+            .then(response => response.json())
+            .then(letterData => {
+                // Calculate the total number of letters
+                const totalLetters = letterData.counts.reduce((sum, count) => sum + count, 0);
+
+                // Dynamically set the chart height based on the total number of letters
+                const chartHeight = Math.min(600, Math.max(300, totalLetters / 10)); // Scale height with a cap
+                const chartWidth = Math.min(800, Math.max(400, letterData.labels.length * 50)); // Scale width with a cap
+
+                // Adjust the canvas height and width dynamically
+                const canvas = document.getElementById('letterChart');
+                canvas.height = chartHeight;
+                canvas.width = chartWidth;
+
+                // Create the chart with fetched data
+                const ctx = canvas.getContext('2d');
+                const letterChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: letterData.labels, // Dates from the backend
+                        datasets: [{
+                            label: 'Number of Letters Generated',
+                            data: letterData.counts, // Counts from the backend
+                            backgroundColor: '#396f66',
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Date'
+                                },
+                                font: {
+                                    size: 14
+                                }
+                            },
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Number of Letters'
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        }
+                    }
+                });
+            })
+            .catch(error => console.error('Error fetching data:', error));
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
