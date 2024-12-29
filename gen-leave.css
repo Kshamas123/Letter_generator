@@ -105,4 +105,31 @@
       width: 100%;
     }
   }
-  
+  .user-icon {
+    position: fixed; /* Makes the button fixed at the top-right corner */
+    top: 10px; /* Adjust distance from the top */
+    right: 10px; /* Adjust distance from the right */
+    background-color: #468377; /* Match theme */
+    border: none;
+    border-radius: 50%; /* Circular button */
+    width: 40px; /* Size of the button */
+    height: 40px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, background-color 0.3s ease;
+    z-index: 1000; /* Ensure it stays above other content */
+  }
+
+  .user-icon:hover {
+    background-color: #254943; /* Hover effect */
+    transform: scale(1.1); /* Slight zoom on hover */
+  }
+
+  /* Add an icon inside the button */
+  .user-icon::before {
+    content: '\f007'; /* Font Awesome user icon */
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    color: white;
+    font-size: 18px;
+  }

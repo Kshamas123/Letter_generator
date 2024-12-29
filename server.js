@@ -689,8 +689,38 @@ app.get('/letters/total', async (req, res) => {
   }
 });
 
+// Assuming you're using Express and have a MySQL pool connection setup
+app.get('/user-history', async (req, res) => {
+  const userId = req.query.userId;  // Retrieve the user ID from the query parameter
 
+  if (!userId) {
+      return res.status(400).json({ error: 'User ID is required' });
+  }
 
+  try {
+      // Query to get letter history for the user
+      const query = `
+          SELECT 
+              ll.LETTER_TYPE,
+              ll.OPERATION_DATE,
+              u.USERNAME
+          FROM 
+              letter_logs ll
+          JOIN 
+              USER_DETAILS u ON ll.USERID = u.USERID  -- Correct table name here
+          WHERE 
+              ll.USERID = ?  -- Use the user ID from the query parameter
+          ORDER BY 
+              ll.OPERATION_DATE DESC;
+      `;
+
+      const [results] = await pool.execute(query, [userId]);
+      res.json(results);  // Return the user's letter history
+  } catch (err) {
+      console.error('Error fetching letter history:', err);
+      res.status(500).json({ error: 'Internal server error' });
+  }
+});
 
 
 

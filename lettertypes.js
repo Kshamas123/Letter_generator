@@ -1,6 +1,8 @@
 
 const buttons = document.querySelectorAll('.letter-button');
-
+function goToDashboard() {
+  window.location.href = "userdashboard.html";
+}
 
 const letterPages = {
   "Invitation Letter": "invitation.html",
