@@ -731,6 +731,30 @@ app.get('/letters/total', async (req, res) => {
     }
 });
 
+app.get('/letter-stats', async (req, res) => {
+  try {
+    // Execute the query and fetch results
+    const [results] = await pool.execute(`
+      SELECT DATE(OPERATION_DATE) AS generation_date, COUNT(*) AS total_letters
+      FROM letter_logs
+      GROUP BY generation_date
+      ORDER BY generation_date;
+    `);
+
+    // Format the results for the frontend
+    const labels = results.map(row => row.generation_date);
+    const counts = results.map(row => row.total_letters);
+
+    // Send the response as JSON
+    res.json({ labels, counts });
+
+    // Optionally log the results to check the query output
+    console.log(results);
+  } catch (err) {
+    console.error('Error fetching letter stats:', err);
+    res.status(500).send('Internal Server Error');
+  }
+});
 
 
   app.listen(port, () => {
