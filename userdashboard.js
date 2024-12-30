@@ -13,11 +13,15 @@ document.addEventListener("DOMContentLoaded", function () {
         const totalLettersCard = document.querySelector(".dashboard-section .card:first-child p");
         totalLettersCard.textContent = 'Error fetching total letters';
       });
-  
+
     // Handle the logout button
     document.getElementById("logout-btn").addEventListener("click", function () {
       alert("You have been logged out!");
       window.location.href = "index.html"; // Redirect to homepage
+    });
+    document.getElementById('history-btn').addEventListener('click', function() {
+      // Redirect to the history page
+      window.location.href = 'history.html';
     });
   });
   

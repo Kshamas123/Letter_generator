@@ -10,6 +10,9 @@ loginbtn.addEventListener("click", () => {
   container.classList.remove("active");
 });
 
+function clearSessionExceptUserId() {
+  sessionStorage.clear(); // Clear all session storage
+}
 document.getElementById('signupform').addEventListener('submit', async(e) => {
   e.preventDefault();
   const name = document.getElementById('name').value;
@@ -21,6 +24,7 @@ document.getElementById('signupform').addEventListener('submit', async(e) => {
   document.getElementById('name').value="";
   document.getElementById('password').value="";
   document.getElementById('email').value="";
+  clearSessionExceptUserId();
   const response = await fetch('http://localhost:3000/sign_up', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -52,6 +56,7 @@ document.getElementById('signinform').addEventListener('submit', async(e) => {
   console.log(password);
   document.getElementById('name1').value="";
   document.getElementById('password1').value="";
+  clearSessionExceptUserId();
   const response = await fetch('http://localhost:3000/sign_in', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
