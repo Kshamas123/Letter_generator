@@ -25,7 +25,7 @@
   const pool = mysql.createPool({
       host: 'localhost',
       user: 'root',
-      password: 'kshama123',
+      password: 'megha@102',
       database: 'letter_generator_dbms',
       waitForConnections: true,
       connectionLimit: 10,

@@ -73,6 +73,7 @@ body {
     padding: 20px;
     flex-grow: 1;
     animation: fadeInContent 0.8s ease-out; /* Smooth fade-in for content */
+    overflow-y: auto;
 }
 
 @keyframes fadeInContent {

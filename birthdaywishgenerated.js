@@ -1,4 +1,8 @@
 // Function to format the date to DD-MM-YYYY format
+
+function goToDashboard() {
+  window.location.href = "userdashboard.html";
+}
 function formatDate(dateString) {
     const date = new Date(dateString);
     const year = date.getFullYear();
