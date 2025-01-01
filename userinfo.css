@@ -20,12 +20,31 @@ body {
     background-color: #396f66; /* Sidebar color */
     color: white;
     padding: 20px;
-    height: 100vh;
-    position: fixed;
+    position: fixed; /* Keep it fixed on the screen */
     top: 0;
     left: -300px; /* Initially off-screen */
+    height: 100vh; /* Full viewport height */
+    overflow-y: auto; /* Enable scrolling when content exceeds the height */
     animation: slideInSidebar 0.6s forwards ease-out; /* Slide-in animation */
+    scrollbar-width: thin; /* For modern browsers: thinner scrollbar */
+    scrollbar-color: #4c9085 #396f66; /* Custom scrollbar colors */
 }
+
+/* Custom Scrollbar Styling for Webkit Browsers (Chrome, Edge, Safari) */
+.sidebar::-webkit-scrollbar {
+    width: 8px; /* Scrollbar width */
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background-color: #4c9085; /* Scrollbar thumb color */
+    border-radius: 4px; /* Rounded edges */
+}
+
+.sidebar::-webkit-scrollbar-track {
+    background-color: #396f66; /* Scrollbar track color */
+}
+
+
 
 /* Sidebar animation */
 @keyframes slideInSidebar {
@@ -67,12 +86,13 @@ body {
     transform: scale(1.05); /* Slight zoom on hover */
 }
 
-/* Content Area */
 .content {
     margin-left: 250px; /* Adjust content to the right of the sidebar */
     padding: 20px;
     flex-grow: 1;
+    min-height: 100vh; /* Ensure the content spans the full viewport */
     animation: fadeInContent 0.8s ease-out; /* Smooth fade-in for content */
+    overflow-y: auto;
 }
 
 @keyframes fadeInContent {
