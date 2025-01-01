@@ -1,4 +1,8 @@
-document.getElementById('letterForm').addEventListener('submit', async (e) => {
+
+function goToDashboard() {
+    window.location.href = "userdashboard.html";
+  }
+  document.getElementById('letterForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     const senderAddress = document.getElementById('senderAddress').value;
     const letterDate = document.getElementById('date').value;

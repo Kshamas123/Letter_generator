@@ -1,4 +1,6 @@
-
+function goToDashboard() {
+    window.location.href = "userdashboard.html";
+  }
 document.getElementById('letterForm').addEventListener('submit', async (e) => {
     e.preventDefault();
 
