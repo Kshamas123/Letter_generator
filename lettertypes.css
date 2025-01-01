@@ -1,78 +1,79 @@
 /* General Body Styling */
 body {
-    font-family: 'Poppins', sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f7f7f7;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    flex-direction: column;
-  }
-  
-  /* Header Styling */
-  .header {
-    text-align: center;
-    padding: 30px 20px;
-    background-color: #254943; /* Theme color */
-    color: white;
-    width: 100%;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    margin-bottom: 30px;
-  }
-  
-  .website-name {
-    font-size: 40px;
-    font-weight: 600;
-    margin: 0;
-  }
-  
-  .quote {
-    font-size: 20px;
-    font-weight: 400;
-    margin-top: 10px;
-  }
-  
-  /* Letter Container - 2 Columns Layout */
-  .letter-container {
-    display: flex;
-    justify-content: space-between;
-    gap: 30px;
-    flex-wrap: wrap;
-    max-width: 1000px;
-    width: 100%;
-    padding: 10px;
-  }
-  
-  /* Column Styling */
-  .letter-column {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    width: 45%;
-  }
-  
-  /* Button Styling */
-  .letter-button {
-    background-color: #468377; /* Same as header for consistency */
-    color: white;
-    padding: 15px;
-    font-size: 18px;
-    font-weight: 500;
-    border: none;
-    border-radius: 8px;
-    text-align: center;
-    cursor: pointer;
-    transition: transform 0.3s ease, background-color 0.3s ease;
-  }
-  
-  .letter-button:hover {
-    background-color: #254943;
-    transform: scale(1.05);
-  }
-  
-  .letter-button:focus {
-    outline: none;
-  }
-/* Circular Button Styling */
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f7f7f7;
+  display: flex;
+  flex-direction: column; /* Stack elements vertically */
+  min-height: 100vh;
+}
+
+/* Header Styling */
+.header {
+  text-align: center;
+  padding: 30px 20px;
+  background-color: #254943; /* Theme color */
+  color: white;
+  width: 100%;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.website-name {
+  font-size: 40px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.quote {
+  font-size: 20px;
+  font-weight: 400;
+  margin-top: 10px;
+}
+
+/* Letter Container - Align to Top */
+.letter-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 30px;
+  flex-wrap: wrap;
+  max-width: 1000px;
+  width: 100%;
+  padding: 10px;
+  margin: 20px auto 0; /* Add margin-top to create space below the header */
+}
+
+/* Column Styling */
+.letter-column {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 45%;
+}
+
+/* Button Styling */
+.letter-button {
+  background-color: #468377; /* Same as header for consistency */
+  color: white;
+  padding: 15px;
+  font-size: 18px;
+  font-weight: 500;
+  border: none;
+  border-radius: 8px;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.letter-button:hover {
+  background-color: #254943;
+  transform: scale(1.05);
+}
+
+.letter-button:focus {
+  outline: none;
+}
+
+
+

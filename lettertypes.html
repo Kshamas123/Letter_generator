@@ -5,37 +5,151 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-  <title>Letter Type Interface</title>
+  <title>LetterWorld - A Universe of Letters</title>
   <link rel="stylesheet" href="lettertypes.css">
   <style>
+    /* General Body Styling */
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f7f7f7;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    /* Header Styling */
+    .header {
+      text-align: center;
+      padding: 30px 20px;
+      background-color: #254943;
+      color: white;
+      width: 100%;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      margin-bottom: 30px;
+    }
+
+    .website-name {
+      font-size: 40px;
+      font-weight: 600;
+      margin: 0;
+    }
+
+    .quote {
+      font-size: 20px;
+      font-weight: 400;
+      margin-top: 10px;
+    }
+
+    /* Letter Container */
+    .letter-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      max-width: 1000px;
+      width: 100%;
+      padding: 10px;
+    }
+
+    /* Letter Buttons */
+    .letter-button {
+      background-color: #468377;
+      color: white;
+      padding: 15px;
+      font-size: 18px;
+      font-weight: 500;
+      border: none;
+      border-radius: 8px;
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.3s ease, background-color 0.3s ease;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .letter-button:hover {
+      background-color: #254943;
+      transform: scale(1.05);
+    }
+
     /* User Icon - Fixed at Top-Right */
     .user-icon {
-      position: fixed; /* Makes the button fixed at the top-right corner */
-      top: 10px; /* Adjust distance from the top */
-      right: 10px; /* Adjust distance from the right */
-      background-color: #468377; /* Match theme */
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      background-color: #468377;
       border: none;
-      border-radius: 50%; /* Circular button */
-      width: 40px; /* Size of the button */
+      border-radius: 50%;
+      width: 40px;
       height: 40px;
       cursor: pointer;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
       transition: transform 0.3s ease, background-color 0.3s ease;
-      z-index: 1000; /* Ensure it stays above other content */
+      z-index: 1000;
     }
 
     .user-icon:hover {
-      background-color: #254943; /* Hover effect */
-      transform: scale(1.1); /* Slight zoom on hover */
+      background-color: #254943;
+      transform: scale(1.1);
     }
 
-    /* Add an icon inside the button */
     .user-icon::before {
       content: '\f007'; /* Font Awesome user icon */
       font-family: "Font Awesome 6 Free";
       font-weight: 900;
       color: white;
       font-size: 18px;
+    }
+
+    /* Featured Section */
+    .featured-section {
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    .featured-section h2 {
+      font-size: 28px;
+      color: #254943;
+      margin-bottom: 20px;
+    }
+
+    .card-container {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .card {
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+      width: 300px; /* Bigger card width */
+      text-align: left;
+    }
+
+    .card h3 {
+      color: #468377;
+      margin-bottom: 10px;
+      font-size: 22px;
+    }
+
+    .card p {
+      color: #555;
+      font-size: 16px;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 60px;
+      background-color: #254943;
+      color: white;
+      margin-top: auto;
+      font-size: 14px;
+      width: 100%;
     }
   </style>
 </head>
@@ -51,45 +165,51 @@
 
   <!-- Letter Types Section -->
   <div class="letter-container">
-    <div class="letter-column">
-      <div class="letter-button">Invitation Letter</div>
-      <div class="letter-button">Birthday Letter</div>
-      <div class="letter-button">Congratulations Letter</div>
-      <div class="letter-button">Leave Letter</div>
-      <div class="letter-button">Letter E</div>
-      <div class="letter-button">Letter F</div>
-      <div class="letter-button">Letter G</div>
-      <div class="letter-button">Letter A</div>
-      <div class="letter-button">Letter B</div>
-      <div class="letter-button">Letter C</div>
-      <div class="letter-button">Letter D</div>
-      <div class="letter-button">Letter E</div>
-      <div class="letter-button">Letter F</div>
-      <div class="letter-button">Letter G</div>
-    </div>
-    <div class="letter-column">
-      <div class="letter-button">Letter H</div>
-      <div class="letter-button">Letter I</div>
-      <div class="letter-button">Letter J</div>
-      <div class="letter-button">Letter K</div>
-      <div class="letter-button">Letter L</div>
-      <div class="letter-button">Letter M</div>
-      <div class="letter-button">Letter N</div>
-      <div class="letter-button">Letter H</div>
-      <div class="letter-button">Letter I</div>
-      <div class="letter-button">Letter J</div>
-      <div class="letter-button">Letter K</div>
-      <div class="letter-button">Letter L</div>
-      <div class="letter-button">Letter M</div>
-      <div class="letter-button">Letter N</div>
+    <div class="letter-button" onclick="generateLetter('invitation')">Invitation Letter</div>
+    <div class="letter-button" onclick="generateLetter('birthday')">Birthday Letter</div>
+    <div class="letter-button" onclick="generateLetter('congratulations')">Congratulations Letter</div>
+    <div class="letter-button" onclick="generateLetter('leave')">Leave Letter</div>
+  </div>
+
+  <!-- Featured Section -->
+  <div class="featured-section">
+    <h2>Featured Letters</h2>
+    <div class="card-container">
+      <div class="card">
+        <h3>Invitation Letter</h3>
+        <p>Send a professional invitation for any event.</p>
+      </div>
+      <div class="card">
+        <h3>Birthday Letter</h3>
+        <p>Make someone's day special with a heartfelt message.</p>
+      </div>
+      <div class="card">
+        <h3>Leave Letter</h3>
+        <p>Request time off with a formal application.</p>
+      </div>
+      <div class="card">
+        <h3>Congratulations Letter</h3>
+        <p>Celebrate achievements with a personal touch.</p>
+      </div>
     </div>
   </div>
 
-  <script src="lettertypes.js">
-    // Function to redirect to userdashboard.html
-   
-  </script>
-   <script src="userdashboard.js"></script>
 
+
+  <!-- JavaScript -->
+  <script>
+    function goToDashboard() {
+      alert('Redirecting to the User Dashboard.');
+      // Redirect to the dashboard (example: userdashboard.html)
+      window.location.href = "userdashboard.html";
+    }
+
+    function generateLetter(type) {
+      alert(`Generating a ${type} letter.`);
+      // Add functionality for generating letters based on type
+    }
+  </script>
 </body>
 </html>
+
+
