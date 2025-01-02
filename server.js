@@ -25,7 +25,7 @@
   const pool = mysql.createPool({
       host: 'localhost',
       user: 'root',
-      password: 'kshama123',
+      password: 'megha@102',
       database: 'letter_generator_dbms',
       waitForConnections: true,
       connectionLimit: 10,
@@ -44,7 +44,7 @@
           const query = 'INSERT INTO USER_DETAILS (USERNAME, USERPASSWORD, USEREMAIL) VALUES (?, ?, ?)';
           const [result] = await pool.query(query, [Name, Password, Email]);
 
-          req.session.userId = result.insertId;
+          req.session.userId = result.insertId; 
           console.log('Session Data after sign-up:', req.session);
           res.status(201).send({ message: 'Account created successfully', userId: result.insertId });
       } catch (error) {
